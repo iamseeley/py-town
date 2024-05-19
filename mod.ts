@@ -1,7 +1,8 @@
-import { serve } from "https://deno.land/std/http/server.ts";
-import { run } from "https://deno.land/x/fastapi@v0.1.0/mod.ts";
-import app from "./main.py";
+import { initializePyodide } from "./pyodide_setup.ts";
+import { executePython } from "./python_executor.ts";
 
-const handler = run(app);
+export async function runPythonCode(code: string) {
+    const pyodide = await initializePyodide();
+    return await executePython(pyodide, code);
+}
 
-serve(handler, { port: 8000 });
