@@ -13,9 +13,6 @@ export async function initializePyodide() {
         indexURL: pyodideUrl,
     });
 
-    // Load necessary Python packages
-    await pyodide.loadPackage("micropip");
-
     return pyodide;
 }
 
