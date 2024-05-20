@@ -9,7 +9,7 @@ export async function runPythonCode(code: string) {
 }
 
 export async function runPythonCodeInWorker(code: string) {
-  const worker = new Worker(new URL("./pyodide-worker.ts", import.meta.url).toString(), { type: "module" });
+  const worker = new Worker(new URL("./pyodide_worker.ts", import.meta.url).toString(), { type: "module" });
 
   return new Promise<string>((resolve, reject) => {
     worker.onmessage = (event: MessageEvent) => {

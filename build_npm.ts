@@ -10,7 +10,7 @@ await build({
   },
   package: {
     name: "py-town",
-    version: "0.0.3",
+    version: "0.0.6",
     description: "Execute Python code with Pyodide in Deno and other JS environments",
     license: "MIT",
     repository: {
@@ -22,7 +22,7 @@ await build({
     },
   },
   postBuild() {
-    
+   Deno.copyFileSync('pyodide_worker.ts', 'npm/pyodide-worker.js'); 
     Deno.copyFileSync("README.md", "npm/README.md");
   },
 });
