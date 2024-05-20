@@ -1,7 +1,7 @@
 import { initializePyodide } from "./pyodide_setup.ts";
 import { executePython } from "./python_executor.ts";
 
-self.onmessage = async (event) => {
+self.onmessage = async (event: MessageEvent) => {
   const pyodide = await initializePyodide();
   const code = event.data;
   try {
@@ -11,5 +11,4 @@ self.onmessage = async (event) => {
     self.postMessage(`Error: ${error.message}`);
   }
 };
-
 
