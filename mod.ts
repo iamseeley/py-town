@@ -1,11 +1,7 @@
+/// <reference lib="dom" />
+
 import { initializePyodide } from "./pyodide_setup.ts";
 import { executePython } from "./python_executor.ts";
-
-
-declare var Worker: {
-  prototype: Worker;
-  new (stringUrl: string | URL, options?: WorkerOptions): Worker;
-};
 
 export async function runPythonCode(code: string) {
   const pyodide = await initializePyodide();
@@ -29,5 +25,6 @@ export async function runPythonCodeInWorker(code: string) {
     worker.postMessage(code);
   });
 }
+
 
 
