@@ -10,15 +10,15 @@ await build({
   },
   package: {
     name: "py-town",
-    version: "0.0.2",
+    version: "0.0.3",
     description: "Execute Python code with Pyodide in Deno and other JS environments",
     license: "MIT",
     repository: {
       type: "git",
-      url: "git+https://github.com/yourusername/py-town.git",
+      url: "git+https://github.com/iamseeley/py-town.git",
     },
     bugs: {
-      url: "https://github.com/yourusername/py-town/issues",
+      url: "https://github.com/iamseeley/py-town/issues",
     },
   },
   postBuild() {
