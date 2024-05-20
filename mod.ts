@@ -1,31 +1,32 @@
 import { initializePyodide } from "./pyodide_setup.ts";
 import { executePython } from "./python_executor.ts";
 
-export async function runPythonCode(code: string) {
-    const pyodide = await initializePyodide();
-    return await executePython(pyodide, code);
+declare global {
+  interface Window {
+    Worker: typeof Worker;
+  }
 }
 
-export function runPythonCodeInWorker(code: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const worker = new Worker(new URL("./pyodide-worker.js", import.meta.url), { type: "module" });
+export async function runPythonCode(code: string) {
+  const pyodide = await initializePyodide();
+  return await executePython(pyodide, code);
+}
 
-        worker.onmessage = (event) => {
-            const { result, error } = event.data;
-            worker.terminate();
-            if (error) {
-                reject(error);
-            } else {
-                resolve(result);
-            }
-        };
+export async function runPythonCodeInWorker(code: string) {
+  const worker = new Worker(new URL("./pyodide-worker.ts", import.meta.url), { type: "module" });
 
-        worker.onerror = (error) => {
-            worker.terminate();
-            reject(error.message);
-        };
+  return new Promise<string>((resolve, reject) => {
+    worker.onmessage = (event: MessageEvent) => {
+      resolve(event.data);
+      worker.terminate();
+    };
 
-        worker.postMessage({ code });
-    });
+    worker.onerror = (error: ErrorEvent) => {
+      reject(error.message);
+      worker.terminate();
+    };
+
+    worker.postMessage(code);
+  });
 }
 
