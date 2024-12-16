@@ -10,7 +10,7 @@ await build({
   },
   package: {
     name: "py-town",
-    version: "0.0.7",
+    version: "0.0.8",
     description:
       "Execute Python code with Pyodide in Deno and other JS environments",
     license: "MIT",

@@ -2,28 +2,23 @@ const pyodideUrl = "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/";
 
 export async function initializePyodide() {
   // Mock the global objects expected by Pyodide
-  (globalThis as any).window = {};
-  (globalThis as any).document = {
-    location: { href: "" },
-    currentScript: { src: "" },
+  (globalThis as any).window = {
+    document: {
+      currentScript: { src: pyodideUrl },
+      location: { href: pyodideUrl },
+    },
+    location: { href: pyodideUrl },
   };
   (globalThis as any).navigator = {};
 
-  // Dynamically import Pyodide
-  const importMap = {
-    imports: {
-      url: "https://deno.land/std/node/url.ts",
-    },
-  };
+  // Load Pyodide script
+  (globalThis as any).loadPyodide = (
+    await import(`${pyodideUrl}pyodide.js`)
+  ).default;
 
-  // Set up import map
-  if (!(globalThis as any).importMap) {
-    (globalThis as any).importMap = importMap;
-  }
-
-  const { loadPyodide } = await import(`${pyodideUrl}pyodide.js`);
-  const pyodide = await loadPyodide({
+  const pyodide = await (globalThis as any).loadPyodide({
     indexURL: pyodideUrl,
   });
+
   return pyodide;
 }
